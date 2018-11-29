@@ -146,8 +146,11 @@ infiles.each do |infile|
         end
 
         if interlace
-            system("convert -interlace plane %s tmp.png" % infile)
+            p "interlace"
+            system("convert -interlace plane %s %stmp.png" % [infile, directory])
             infile = directory + 'tmp.png'
+            p "directory"
+            p directory
         end
 
         PNGlitch.open(infile) do |p|
@@ -209,6 +212,7 @@ infiles.each do |infile|
             #p.save 'dashboard_iphone_glitched.png'
         end
     rescue
+        p 'error?'
         # if there's an error opening the file, just skip it
     end
 end
