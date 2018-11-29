@@ -1,5 +1,5 @@
 # Pnglitchify
-Automates rapid glitching of multiple PNG files using the pnglitch gem
+Automates rapid glitching of multiple PNG files using the [pnglitch gem](https://ucnv.github.io/pnglitch/).
 
 # Dependencies
     gem install pnglitch
