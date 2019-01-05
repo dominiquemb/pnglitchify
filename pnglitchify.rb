@@ -240,37 +240,35 @@ infiles.each do |infile|
             options << 'compress' if compress
             options << method.to_s
 
-            unless incorrectfilter
-                process = Proc.new{|data, range|
-                    case method
-                        when methods['replace']
-                            range.times do
-                                data[rand(data.size)] = 'x'
-                            end
-                            data
-                        when methods['transpose']
-                            x = data.size / 4
-                            data[0, x] + data[x * 2, x] + data[x * 1, x] + data[x * 3..-1]
-                        when methods['defect']
-                            (range / 5).times do
-                                data[rand(data.size)] = ''
-                            end
-                            data
-                        when methods['graft']
-                            p.each_scanline do |line|
-                                line.graft rand(5)
-                            end
-                    end
-                }
+            process = Proc.new{|data, range|
+                case method
+                    when methods['replace']
+                        range.times do
+                            data[rand(data.size)] = 'x'
+                        end
+                        data
+                    when methods['transpose']
+                        x = data.size / 4
+                        data[0, x] + data[x * 2, x] + data[x * 1, x] + data[x * 3..-1]
+                    when methods['defect']
+                        (range / 5).times do
+                            data[rand(data.size)] = ''
+                        end
+                        data
+                    when methods['graft']
+                        p.each_scanline do |line|
+                            line.graft rand(5)
+                        end
+                end
+            }
 
-                unless compress 
-                    p.glitch do |data|
-                        process.call data, 50
-                    end
-                else 
-                    p.glitch_after_compress do |data|
-                        process.call data, 10
-                    end
+            unless compress 
+                p.glitch do |data|
+                    process.call data, 50
+                end
+            else 
+                p.glitch_after_compress do |data|
+                    process.call data, 10
                 end
             end
 
