@@ -58,6 +58,8 @@ interlace = false
 compress = false
 alpha = false
 filter = filters[0]
+chosenfilter = false
+chosenincorrectfilter = false
 method = methods[0]
 incorrectfilter = false
 directory = ""
@@ -100,11 +102,11 @@ options.keys.each_with_index do |key, index|
             filter = filters[chosenfilter]
         end
     elsif key == 'I' || key == 'incorrect'
-        chosenfilter = options[key][0]
-        if chosenfilter == 'random'
+        chosenincorrectfilter = options[key][0]
+        if chosenincorrectfilter == 'random'
             incorrectfilter = rand(0..4)
         else
-            incorrectfilter = chosenfilter
+            incorrectfilter = chosenincorrectfilter
         end
     elsif key == 'm' || key == 'method'
         chosenmethod = options[key][0]
@@ -168,6 +170,12 @@ infiles.each do |infile|
             unless incorrectfilter
                 p.change_all_filters filter unless filter == filters['optimized']
             else
+                if chosenfilter
+                    p.each_scanline do |l|
+                        l.graft filter
+                    end
+                end
+
                 p "incorrect filter: "
                 p incorrectfilter
                 if incorrectfilter == 1 || incorrectfilter == "1"
